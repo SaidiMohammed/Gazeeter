@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" href="favicon.ico" type="image/x-icon">
+
+  <link rel="stylesheet" href="./dist/css/bootstrap.min.css" />
+  <link rel="stylesheet" href="./dist/leaflet/leaflet.css" />
+  <link rel="stylesheet" href="./dist/fontawesome/css/all.css">
+  <link rel="stylesheet" href="./dist/css/easy-button.css" />
+  <link rel="stylesheet" href="./dist/css/MarkerCluster.css" />
+  <link rel="stylesheet" href="./dist/css/MarkerCluster.Default.css" />
+  <link rel="stylesheet" href="./dist/css/leaflet.extra-markers.min.css">
+  <link rel="stylesheet" href="./dist/css/styles.css" />
+
+  <title>World Map</title>
+</head>
+
+<body>
+  <!-- Countries NavBar -->
+  <span id="selectContainer">
+    <select id="countrySelect" class="form-select shadow-sm"></select>
+  </span>
+
+  <div id="map"></div>
+
+  <!-- Overview Modal -->
+<div class="modal fade" id="overviewModal" tabindex="-1" aria-labelledby="overview" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" style="max-width: 370px;">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">
+          Overview
+        </h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <table class="table table-striped" aria-labelledby="overviewTable">
+            <tr>
+              <td><i class="fa-solid fa-clock fa-xl text-success"></i></td>
+              <th>Timezone</th>
+              <td><span id="timezone"></span></td>
+            </tr>
+            <tr>
+              <td><i class="fa-solid fa-flag fa-xl text-success"></i></td>
+              <th>Country Code</th>
+              <td><span id="countryCode"></span></td>
+            </tr>
+            <tr>
+              <td><i class="fa-solid fa-landmark-flag fa-xl text-success"></i></td>
+              <th>Capital City</th>
+              <td><span id="capital"></span></td>
+            </tr>
+            <tr>
+              <td><i class="fa-solid fa-earth fa-xl text-success"></i></td>
+              <th>Continent</th>
+              <td><span id="continent"></span></td>
+            </tr>
+            <tr>
+              <td><i class="fa-solid fa-users fa-xl text-success"></i></td>
+              <th>Population</th>
+              <td><span id="population"></span></td>
+            </tr>
+            <tr>
+              <td><i class="fa-solid fa-coins fa-xl text-success"></i></td>
+              <th>Currency</th>
+              <td><span id="currency"></span></td>
+            </tr>
+            <tr>
+              <td><i class="fa-solid fa-up-down-left-right fa-xl text-success"></i></td>
+              <th>Area</th>
+              <td><span id="area"></span></td>
+            </tr>
+            <tr>
+              <td><i class="fa-solid fa-left-right fa-xl text-success"></i></td>
+              <th>Latitude</th>
+              <td><span id="latitude"></span></td>
+            </tr>
+            <tr>
+              <td><i class="fa-solid fa-up-down fa-xl text-success"></i></td>
+              <th>Longitude</th>
+              <td><span id="longitude"></span></td>
+            </tr>
+          </table>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+            Close
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- Wikipedia Modal -->
+  <div id="wikipediaModal" class="modal fade" tabindex="-1" aria-labelledby="wikipedia" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+      <div class="modal-content">
+        <div class="modal-header bg-primary text-white">
+          <h5 class="modal-title" id="exampleModalLabel">Wikipedia</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <table class="table table-striped">
+            <tr>
+              <td><h4 id="wikipediaTitle" class="text-center"></h4></td>
+            </tr>
+            <tr>
+              <td id="wikipediaImage" class="text-center"></td>
+            </tr>
+            <tr>
+              <td id="wikipediaSummary" class="text-center"></td>
+            </tr>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<!-- Weather Modal -->
+<div id="weatherModal" class="modal fade" tabindex="-1" aria-labelledby="weather" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
+    <div class="modal-content">
+      <div class="modal-header bg-info text-white">
+        <h5 class="modal-title" id="exampleModalLabel">Weather</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="search-input-container">
+        <div class="input-group mt-1 align-items-center d-flex justify-content-center w-75 mx-auto">
+          <input type="text" id="search-input" placeholder="Search for a city" class="form-control" />
+          <button id="search-button" class="btn btn-primary">Search</button>
+        </div>
+      </div>
+      <div class="modal-body">
+        <!-- Main Widget -->
+        <div class="widget-main text-center" id="main-widget">
+          <h1 id="today"></h1>
+          <h3 id="weatherCity"></h3>
+          <div id="weatherEmoji" class="mb-1"></div>
+          <strong>
+            <h3 id="currentTemperature"></h3>
+          </strong>
+          <p id="weatherDescription"></p>
+        </div>
+
+        <!-- Additional Widgets -->
+        <div class="widget-row d-flex justify-content-between" id="additional-widgets">
+          <!-- Additional widgets will be appended here using JavaScript -->
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+  <!-- News Modal -->
+  <div id="newsModal" class="modal fade" tabindex="-1" aria-labelledby="news" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+      <div class="modal-content">
+        <div class="modal-header bg-info text-white">
+          <h5 class="modal-title" id="exampleModalLabel">News</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <h4 id="newsTitle"></h4>
+          <img id="newsImage" alt="">
+          <p id="news"></p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Holiday Modal -->
+  <div id="holidayModal" class="modal fade" tabindex="-1" aria-labelledby="holiday" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+      <div class="modal-content">
+        <div class="modal-header bg-secondary text-white">
+          <h5 class="modal-title" id="exampleModalLabel">Public Holidays</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div id="holidaysTable" class="date-text">
+            
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Currency Modal -->
+  <div class="modal fade" id="currencyModal" tabindex="-1" role="dialog" aria-labelledby="currency"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="currencyModalLabel">Currency Converter</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="form-group">
+            <label for="inputValue">Value </label>
+            <input type="number" class="form-control mb-3" id="inputValue" value="1">
+          </div>
+          <div class="form-group">
+            <label for="inputBaseCurrency">From </label>
+            <select class="form-select shadow-sm mb-3" id="inputBaseCurrency">
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="inputConvertCurrency">To </label>
+            <select class="form-select shadow-sm mb-3" id="inputConvertCurrency">
+            </select>
+          </div>
+          <button type="button" id="currencyConvertButton" class="btn btn-primary mt-3">Convert</button>
+          <hr>
+          <div class="form-group">
+            <label for="currencyResult">Results </label>
+            <select class="form-control mb-3" id="currencyResult" disabled>
+            </select>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Settings Modal -->
+  <div class="modal fade" id="settingsModal" tabindex="-1" aria-labelledby="settingsModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="settingsModalLabel">Settings</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="mb-3">
+            <label class="form-check-label">Select a type</label>
+            <br />
+            <input id="showAtAGlanceOverview" class="form-check-input" type="radio" name="type" checked>
+            <span style='font-size:0.9em'>Overview</span>
+            <input id="showAtAGlanceWikipedia" class="form-check-input" type="radio" name="type">
+            <span style='font-size:0.9em'>Wikipedia</span>
+            <input id="showAtAGlanceWeather" class="form-check-input" type="radio" name="type">
+            <span style='font-size:0.9em'>Weather</span>
+            <br />
+            <input id="showAtAGlanceHolidays" class="form-check-input" type="radio" name="type">
+            <span style='font-size:0.9em'>Holidays</span>
+            <input id="showAtAGlanceCurrency" class="form-check-input" type="radio" name="type">
+            <span style='font-size:0.9em'>Currency</span>
+            <input id="showAtAGlanceNews" class="form-check-input" type="radio" name="type">
+            <span style='font-size:0.9em'>News</span>
+            <br />
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" id="save" class="btn btn-primary" data-bs-dismiss="modal">Save Changes</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="./dist/js/jquery.min.js"></script>
+  <script src="./dist/js/bootstrap.bundle.min.js"></script>
+  <script src="./dist/leaflet/leaflet.js"></script>
+  <script src="./dist/js/easy-button.js"></script>
+  <script src="./dist/js/leaflet.markercluster.js"></script>
+  <script src="./dist/js/leaflet.extra-markers.min.js"></script>
+  <script src="./dist/js/numeral.min.js"></script>
+  <script src="./dist/js/date.js"></script>
+  <script src="./utils/script.js"></script>
+</body>
+</html>
