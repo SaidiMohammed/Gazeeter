@@ -1,16 +1,16 @@
-# Geonames Search and Information Display
+# Gazeeter
 
 ## Description
 
-Welcome to the Geonames Search and Information Display project! This web application allows users to explore geographical data, access Wikipedia articles related to selected locations, and obtain real-time weather information from the nearest weather station. The project aims to provide a seamless experience for users to gain insights into various locations around the world.
+Welcome to the Gazeeter! This web application allows users to explore geographical data, access Wikipedia articles related to selected locations, and obtain real-time weather information from the nearest weather station. The project aims to provide a seamless experience for users to gain insights into various locations around the world.
 
 ## Features
 
-- **Location Search:** Users can search for locations worldwide using the Geonames API.
+- **Location Search:** Users can search for locations worldwide using the Gazeeter API.
 
 - **Wikipedia Integration:** The application fetches Wikipedia articles related to the selected location and displays relevant information such as the article title, summary, feature type, elevation, and more.
 
-- **Weather Information:** Real-time weather data from the nearest weather station is retrieved using the Geonames API. Users can access details like the station name, weather conditions, temperature, humidity, and wind speed.
+- **Weather Information:** Real-time weather data from the nearest weather station is retrieved using the Geosearch API. Users can access details like the station name, weather conditions, temperature, humidity, and wind speed.
 
 - **User-Friendly Interface:** The intuitive user interface allows seamless interaction with search results, Wikipedia articles, and weather information. Clicking on a location displays its Wikipedia details and current weather conditions.
 
@@ -23,8 +23,8 @@ Welcome to the Geonames Search and Information Display project! This web applica
 - HTML, CSS: Front-end design and layout.
 - JavaScript: Interaction with APIs and dynamic content display.
 - jQuery: Simplifying AJAX requests and event handling.
-- PHP: Backend scripts to communicate with the Geonames API.
-- Geonames API: Retrieving geographical and weather data.
+- PHP: Backend scripts to communicate with the Gazeeter API.
+- Gazeeter API: Retrieving geographical and weather data.
 - Wikipedia API: Fetching Wikipedia articles based on location.
 - OpenWeather API: Obtaining real-time weather observations.
 - Leaflet.js: Interactive map display.
@@ -40,7 +40,7 @@ Welcome to the Geonames Search and Information Display project! This web applica
 
 ## Installation for local use
 
-1. Clone the repository: `git clone https://github.com/SaidiMohammed/ITCareerSwitchProjects/project1/`
+1. Clone the repository: `git clone https://github.com/SaidiMohammed/Gazeeter`
 2. Make sure to have XAMPP installed.
 3. Extract the downloaded zip file to the "htdocs" folder in the XAMPP directory in your computer.
 4. Open `index.html` in your web browser by going through this link : http://localhost/project1/index.html.
