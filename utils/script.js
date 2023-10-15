@@ -27,7 +27,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // Create a map and set the default view
   let map = L.map("map", {
-    layers: [night],
+    layers: [light],
     maxBounds: [
       [-85.06, -180],
       [85.06, 180],
@@ -101,6 +101,26 @@ L.control.layers(basemaps, markerLayers).addTo(map);
 
   let selectedCountryLayer = null; // Store the selected country layer
 
+  function highlighter(countryCode) {
+    // Make an AJAX request to get the country border by code
+    $.ajax({
+      url: "./utils/getCountryBorder.php",
+      method: "GET",
+      data: { countryCode: countryCode },
+      success: function (borderData) {
+        if (borderData) {
+          // Create a GeoJSON layer for the selected country border
+          selectedCountryLayer = L.geoJSON(borderData, {
+            style: SELECT_STYLE,
+          }).addTo(map);
+        }
+      },
+      error: function () {
+        console.error("Error fetching country border data.");
+      },
+    });
+  }
+
   function handleCountryClick(event) {
     const selectedCountryCode = this.value;
     const selectedCountryName = this.options[this.selectedIndex].text;
@@ -118,25 +138,8 @@ L.control.layers(basemaps, markerLayers).addTo(map);
     getCapitalCity(selectedCountryCode);
     searchLocation(selectedCountryName);
     searchWikipedia(selectedCountryName);
+    highlighter(selectedCountryCode);
     atAGlance();
-
-    // Make an AJAX request to get the country border by code
-    $.ajax({
-      url: "./utils/getCountryBorder.php",
-      method: "GET",
-      data: { countryCode: selectedCountryCode },
-      success: function (borderData) {
-        if (borderData) {
-          // Create a GeoJSON layer for the selected country border
-          selectedCountryLayer = L.geoJSON(borderData, {
-            style: SELECT_STYLE,
-          }).addTo(map);
-        }
-      },
-      error: function () {
-        console.error("Error fetching country border data.");
-      },
-    });
   }
 
   // Attach click event listener to the country select element
@@ -172,6 +175,7 @@ L.control.layers(basemaps, markerLayers).addTo(map);
               searchLocation(data.data.countryName);
               searchWikipedia(data.data.countryName);
               getCapitalCity(data.data.countryCode);
+              highlighter(data.data.countryCode);
 
               map.eachLayer((layer) => {
                 if (
